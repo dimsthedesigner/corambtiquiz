@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tes Kepribadian Warna Fortekai Pen</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #4b6cb7 0%, #8a3ab9 100%);
+    color: #f0f0f0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  #container {
+    background: #1e1e2f;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    width: 100%;
+    max-width: 600px;
+    padding: 30px 40px;
+  }
+  h1 {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #d5c0f0;
+  }
+  h2 {
+    margin: 20px 0 15px 0;
+    color: #cdb4db;
+  }
+  .question {
+    margin-bottom: 25px;
+  }
+  .question-text {
+    font-weight: 600;
+    margin-bottom: 12px;
+    font-size: 1.1em;
+  }
+  label {
+    display: block;
+    padding: 12px 15px;
+    background: #3b3b59;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  label:hover {
+    background: #5a4e99;
+  }
+  input[type="radio"] {
+    display: none;
+  }
+  input[type="radio"]:checked + label {
+    background: #7e70e0;
+    color: #fff;
+  }
+  #submitBtn {
+    background: #7e70e0;
+    color: #fff;
+    border: none;
+    padding: 15px 0;
+    width: 100%;
+    font-size: 1.1em;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+  }
+  #submitBtn:hover {
+    background: #947ee7;
+  }
+  #result {
+    margin-top: 25px;
+    background: #2a2751;
+    padding: 20px;
+    border-radius: 15px;
+    display: none;
+  }
+  #result h2 {
+    color: #d8b5ff;
+  }
+  #result p {
+    font-size: 1em;
+    line-height: 1.4em;
+    color: #ddd;
+  }
+  #result .color-swatch {
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    margin: 20px auto;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  }
+  @media(max-width: 650px) {
+    #container {
+      padding: 25px 20px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div id="container" role="main">
+    <h1>Tes Kepribadian Warna Fortekai Pen</h1>
+    <form id="quizForm" aria-label="Tes kepribadian berdasarkan warna Fortekai pen">
+      <!-- Questions will be inserted here dynamically -->
+    </form>
+    <button id="submitBtn" type="button">Lihat Hasil</button>
+    <section id="result" aria-live="polite" aria-atomic="true" tabindex="0">
+      <!-- Result will appear here -->
+    </section>
+  </div>
+<script>
+  const colors = {
+    "kuro_black": {
+      name: "Kuro Black",
+      colorCode: "#1c1c1c",
+      personality: "Misterius dan penuh kedalaman, Anda cenderung berfokus pada hal-hal dengan serius dan memiliki intuisi kuat. Anda menyukai ketenangan dan pemikiran mendalam, sekaligus tampil elegan dan tegas.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Kuro Black dengan desain elegan dan tinta pekat untuk menunjukkan kesan berwibawa dan profesional."
+    },
+    "enchanted_pink": {
+      name: "Enchanted Pink",
+      colorCode: "#e75480",
+      personality: "Penuh energi positif, hangat, dan kreatif. Anda adalah jiwa yang ramah, penuh kasih, dan senang menghiasi hari dengan warna ceria serta sentuhan imajinasi.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Enchanted Pink, sempurna untuk kamu yang suka mengekspresikan diri dengan warna cerah dan gaya feminin yang stylish."
+    },
+    "twilight_blue": {
+      name: "Twilight Blue",
+      colorCode: "#4169e1",
+      personality: "Tenang, bijaksana, dan dapat dipercaya. Anda membawa rasa kedamaian dan kestabilan, serta pandangan rasional yang membantu dalam pengambilan keputusan.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Twilight Blue, cocok untuk kamu yang ingin tampil profesional sekaligus tenang dalam setiap tulisan."
+    },
+    "onyx_yellow": {
+      name: "Onyx Yellow",
+      colorCode: "#f4d35e",
+      personality: "Ceriah dan optimis, Anda suka membawa semangat dan keceriaan dalam lingkungan sekitar. Kreatif dan selalu berpikir positif dalam menghadapi tantangan.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Onyx Yellow, cocok untuk kamu yang ingin menambah semangat dan keceriaan di setiap aktivitas menulismu."
+    },
+    "radiant_green": {
+      name: "Radiant Green",
+      colorCode: "#4caf50",
+      personality: "Segar, penuh harapan dan cinta pada alam. Anda adalah pribadi yang menyejukkan, peduli terhadap lingkungan dan memiliki energi yang menstimulasi pertumbuhan.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Radiant Green, pilihan tepat bagi kamu yang ingin merasakan kesejukan dan inspirasi dari alam di setiap goresan pena."
+    },
+    "flash_red": {
+      name: "Flash Red",
+      colorCode: "#e53935",
+      personality: "Berani, penuh semangat dan energik. Anda adalah motivator sejati, selalu siap mengambil inisiatif dan menyalakan gairah di dalam diri dan orang lain.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Flash Red, sempurna untuk kamu yang ingin menonjol dan menyemangati setiap tulisan dengan warna penuh nyala."
+    },
+    "ivory_brown": {
+      name: "Ivory Brown",
+      colorCode: "#a9746e",
+      personality: "Hangat, stabil dan dapat diandalkan. Anda suka kesederhanaan dan menciptakan kenyamanan di sekitar, sosok yang sabar dan memiliki rasa tanggung jawab tinggi.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Ivory Brown, desain klasik dengan warna hangat yang cocok untuk kamu yang mencari kepraktisan dan keanggunan."
+    },
+    "ash_grey": {
+      name: "Ash Grey",
+      colorCode: "#7e7e7e",
+      personality: "Netral, fleksibel dan penuh pertimbangan. Anda terbuka untuk berbagai sudut pandang, dan cenderung menyesuaikan diri dengan situasi untuk mencapai hasil terbaik.",
+      recommendation: "Rekomendasi produk: Fortekai Pen Ash Grey, warna netral yang pas untuk segala suasana dan kebutuhan."
+    }
+  };
+
+  const questions = [
+    {
+      question: "Saat memilih pena untuk menulis, gaya apa yang paling kamu sukai?",
+      answers: [
+        { text: "Elegan dan misterius", color: "kuro_black" },
+        { text: "Cerah dan feminin", color: "enchanted_pink" },
+        { text: "Tenang dan profesional", color: "twilight_blue" },
+        { text: "Cerah dan penuh semangat", color: "onyx_yellow" }
+      ]
+    },
+    {
+      question: "Bagaimana kamu menggambarkan sifatmu dalam bekerja?",
+      answers: [
+        { text: "Penuh semangat dan berani mengambil risiko", color: "flash_red" },
+        { text: "Stabil dan dapat diandalkan", color: "ivory_brown" },
+        { text: "Terbuka dan fleksibel", color: "ash_grey" },
+        { text: "Penuh harapan dan mencintai alam", color: "radiant_green" }
+      ]
+    },
+    {
+      question: "Apa yang paling membuatmu semangat di hari yang sulit?",
+      answers: [
+        { text: "Menyendiri dan merenung", color: "kuro_black" },
+        { text: "Kehangatan dan pertemanan", color: "enchanted_pink" },
+        { text: "Merencanakan solusi secara matang", color: "twilight_blue" },
+        { text: "Sinar matahari dan keceriaan", color: "onyx_yellow" }
+      ]
+    },
+    {
+      question: "Bagaimana kamu menghadapi tantangan baru?",
+      answers: [
+        { text: "Dengan keberanian penuh aksi", color: "flash_red" },
+        { text: "Dengan ketenangan dan analisa", color: "twilight_blue" },
+        { text: "Fleksibel dan siap beradaptasi", color: "ash_grey" },
+        { text: "Mencari inspirasi dari alam sekitar", color: "radiant_green" }
+      ]
+    },
+    {
+      question: "Warna apa yang paling menggambarkan kepribadianmu?",
+      answers: [
+        { text: "Hitam yang misterius", color: "kuro_black" },
+        { text: "Merah menyala penuh energi", color: "flash_red" },
+        { text: "Hijau segar dan penuh harapan", color: "radiant_green" },
+        { text: "Pink ceria dan penuh kasih", color: "enchanted_pink" }
+      ]
+    },
+    {
+      question: "Ketika dihadapkan pada keputusan sulit, kamu biasanya...",
+      answers: [
+        { text: "Mengandalkan intuisi dan perasaan dalam", color: "kuro_black" },
+        { text: "Mencari opini dan dukungan orang sekitar", color: "enchanted_pink" },
+        { text: "Menganalisa dengan logika dan rasional", color: "twilight_blue" },
+        { text: "Membuat keputusan cepat dan tegas", color: "flash_red" }
+      ]
+    },
+    {
+      question: "Teman-teman sering menggambarkan kamu sebagai...",
+      answers: [
+        { text: "Orang yang stabil dan bisa diandalkan", color: "ivory_brown" },
+        { text: "Seseorang yang selalu menebar energi positif", color: "enchanted_pink" },
+        { text: "Pribadi yang tenang dan bijaksana", color: "twilight_blue" },
+        { text: "Sosok fleksibel yang mudah beradaptasi", color: "ash_grey" }
+      ]
+    },
+    {
+      question: "Apa yang paling kamu hargai dalam kehidupan?",
+      answers: [
+        { text: "Keberanian dan semangat hidup", color: "flash_red" },
+        { text: "Kedamaian dan ketenangan", color: "twilight_blue" },
+        { text: "Kreativitas dan kehangatan", color: "enchanted_pink" },
+        { text: "Koneksi dengan alam dan kesegaran", color: "radiant_green" }
+      ]
+    },
+    {
+      question: "Saat kamu menulis sesuatu yang penting, kamu ingin tampil...",
+      answers: [
+        { text: "Klasik dan hangat", color: "ivory_brown" },
+        { text: "Misterius dan kuat", color: "kuro_black" },
+        { text: "Netral dan fleksibel", color: "ash_grey" },
+        { text: "Berani dan penuh energi", color: "flash_red" }
+      ]
+    },
+    {
+      question: "Menurut kamu, warna apa paling cocok untuk membangun rasa percaya diri?",
+      answers: [
+        { text: "Biru yang menenangkan", color: "twilight_blue" },
+        { text: "Merah yang berani", color: "flash_red" },
+        { text: "Hijau yang menyejukkan", color: "radiant_green" },
+        { text: "Kuning ceria dan optimis", color: "onyx_yellow" }
+      ]
+    }
+  ];
+
+  function createQuiz() {
+    const form = document.getElementById('quizForm');
+    questions.forEach((q, i) => {
+      const div = document.createElement('div');
+      div.className = 'question';
+      const questionText = document.createElement('div');
+      questionText.className = 'question-text';
+      questionText.textContent = `${i+1}. ${q.question}`;
+      div.appendChild(questionText);
+
+      q.answers.forEach((ans, idx) => {
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'question' + i;
+        input.id = `q${i}a${idx}`;
+        input.value = ans.color;
+        input.required = true;
+
+        const label = document.createElement('label');
+        label.htmlFor = input.id;
+        label.textContent = ans.text;
+
+        div.appendChild(input);
+        div.appendChild(label);
+      });
+
+      form.appendChild(div);
+    });
+  }
+
+  function calculateResult(formData) {
+    const tally = {};
+    Object.keys(colors).forEach(c => (tally[c] = 0));
+    for(let pair of formData.entries()) {
+      const color = pair[1];
+      if(tally[color] !== undefined) tally[color]++;
+    }
+    let maxColor = null;
+    let maxCount = -1;
+    Object.entries(tally).forEach(([key, val]) => {
+      if(val > maxCount) {
+        maxColor = key;
+        maxCount = val;
+      }
+    });
+    return maxColor;
+  }
+
+  function showResult(colorKey) {
+    const result = document.getElementById('result');
+    const c = colors[colorKey];
+    result.innerHTML = `
+      <h2>Warna Kepribadianmu: ${c.name}</h2>
+      <div class="color-swatch" style="background-color:${c.colorCode};"></div>
+      <p><strong>Deskripsi Kepribadian:</strong> ${c.personality}</p>
+      <p><strong>${c.recommendation}</strong></p>
+      <p>Terima kasih telah mengikuti tes ini!<br>Gunakan Fortekai Pen sesuai kepribadianmu untuk mengekspresikan dirimu secara maksimal.</p>
+    `;
+    result.style.display = 'block';
+    result.focus();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    createQuiz();
+
+    const form = document.getElementById('quizForm');
+    const btn = document.getElementById('submitBtn');
+
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      if(btn.textContent === 'Lihat Hasil') {
+        if(form.checkValidity()) {
+          const formData = new FormData(form);
+          const resultColor = calculateResult(formData);
+          showResult(resultColor);
+          btn.textContent = 'Ulang Tes';
+        } else {
+          form.reportValidity();
+        }
+      } else {
+        location.reload();
+      }
+    });
+  });
+</script>
+</body>
+</html>
+
